@@ -127,17 +127,22 @@
 
         const keyword = document.getElementById("keyword").value.trim();
         // Check for special characters
-if (/[^a-zA-Z0-9 ]/.test(keyword)) {
-    tg.showPopup({
-        title: "Invalid Input",
-        message: "Special characters are not allowed. Use only letters and numbers.",
-        buttons: [{ type: "ok" }]
-    });
-            // Reset button state
-            submitButton.disabled = false;
-            submitButton.innerHTML = originalButtonText;
-            return;
-        }
+  if (keyword === "") {
+        tg.showPopup({
+            title: "Error",
+            message: "Keyword cannot be empty.",
+            buttons: [{ text: "OK" }]
+        });
+    } else if (/[^a-zA-Z0-9 ]/.test(keyword)) {
+        tg.showPopup({
+            title: "Invalid Input",
+            message: "Special characters are not allowed. Use only letters and numbers.",
+            buttons: [{ text: "OK" }]
+        });
+    } else {
+        // Continue with submission process...
+        return;
+    }
 
         const chat_id = userData?.id;
         if (!chat_id) {
