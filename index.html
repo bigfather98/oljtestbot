@@ -51,6 +51,19 @@
         border-radius: 25px;
         cursor: pointer;
     }
+    .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255,255,255,.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
 </style>
 <body>
     <div class="shape"></div>
@@ -58,41 +71,68 @@
     <button id="submit">Submit</button>
 
     <script>
-        window.Telegram.WebApp.expand(); // Expand WebApp to full screen
+    window.Telegram.WebApp.expand(); // Expand WebApp to full screen
 
-        const tg = window.Telegram.WebApp;
-        let userData = tg.initDataUnsafe.user;
+    const tg = window.Telegram.WebApp;
+    let userData = tg.initDataUnsafe.user;
 
-        document.getElementById("submit").addEventListener("click", async () => {
-            const keyword = document.getElementById("keyword").value.trim();
-            if (!keyword) {
-                alert("Please enter a keyword.");
-                return;
-            }
+    document.getElementById("submit").addEventListener("click", async () => {
+        const submitButton = document.getElementById("submit");
+        const originalButtonText = submitButton.innerHTML;
+        
+        // Disable button and show loading state
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="spinner"></span> Loading...'; // You can also use a spinner icon here
 
-            const chat_id = userData?.id;
-            if (!chat_id) {
-                alert("Could not get chat ID.");
-                return;
-            }
+        const keyword = document.getElementById("keyword").value.trim();
+        if (!keyword) {
+            alert("Please enter a keyword.");
+            // Reset button state
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+            return;
+        }
 
-            const webhookUrl = "https://bot.kmonlinesolutions.com/webhook-test/3f74359a-a00a-4b04-b6b4-6952d3180b0d";
+        const chat_id = userData?.id;
+        if (!chat_id) {
+            alert("Could not get chat ID.");
+            // Reset button state
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+            return;
+        }
 
-            try {
-                const response = await fetch(webhookUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ chat_id, keyword }),
-                });
+        const webhookUrl = "https://bot.kmonlinesolutions.com/webhook-test/3f74359a-a00a-4b04-b6b4-6952d3180b0d";
 
-                alert("Keyword updated!");
+        try {
+            const response = await fetch(webhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id, keyword }),
+            });
+
+            if (response.ok) {
+                // Reset button state before alert
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+                
+                alert("Data sent successfully!");
+                // Close the WebApp after a short delay
+                setTimeout(() => {
                     tg.close();
-            } catch (error) {
-                console.error("Error:", error);
-                alert("Failed to send data.");
+                }, 1000);
+            } else {
+                throw new Error('Request failed');
             }
-        });
-    </script>
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to send data.");
+            // Reset button state
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
+    });
+</script>
 
 </body>
 </html>
