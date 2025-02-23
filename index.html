@@ -5,47 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Web App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        input, button { font-size: 18px; padding: 10px; margin-top: 10px; width: 80%; }
-    </style>
+    <link rel="stylesheet" href="styles.css"> <!-- Linking external CSS -->
 </head>
-<body>
 
-    <h2>Enter a Keyword</h2>
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        font-family: Arial, sans-serif;
+        align-items: center;
+        background-color: #f4f4f4;
+        width: 100vw;
+        min-height: 100vh;
+    }
+
+    .shape {
+        position: inherit;
+        margin-left: 0px;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  width: 100%;
+  height: 20vh;
+  background: url(https://design.penpot.app/assets/by-file-media-id/9e338376-2bc9-8123-8005-c770a95d3b84) no-repeat center center / cover;
+  border-radius: 0px;
+}
+
+    input {
+        font-size: 18px;
+        padding: 10px;
+        margin-top: 50px;
+        width: 60%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 10px;
+        margin-top: 10px;
+        width: 60%;
+        background-color: #09afb8ff;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+    }
+</style>
+<body>
+    <div class="shape"></div>
     <input type="text" id="keyword" placeholder="Enter keyword...">
     <button id="submit">Submit</button>
 
     <script>
         window.Telegram.WebApp.expand(); // Expand WebApp to full screen
 
-        // Get user data from Telegram WebApp
         const tg = window.Telegram.WebApp;
         let userData = tg.initDataUnsafe.user;
-        
-        if (!userData) {
-            alert("Failed to get Telegram user data. Please open this from Telegram.");
-        }
 
         document.getElementById("submit").addEventListener("click", async () => {
             const keyword = document.getElementById("keyword").value.trim();
-
             if (!keyword) {
                 alert("Please enter a keyword.");
                 return;
             }
 
-            const chat_id = userData?.id; // Extract Telegram user ID
-
+            const chat_id = userData?.id;
             if (!chat_id) {
                 alert("Could not get chat ID.");
                 return;
             }
 
-            // Replace this with your n8n webhook URL
             const webhookUrl = "https://bot.kmonlinesolutions.com/webhook-test/3f74359a-a00a-4b04-b6b4-6952d3180b0d";
 
-            // Send data to n8n webhook
             try {
                 const response = await fetch(webhookUrl, {
                     method: "POST",
@@ -53,9 +85,7 @@
                     body: JSON.stringify({ chat_id, keyword }),
                 });
 
-                const result = await response.json();
                 alert("Data sent successfully!");
-
             } catch (error) {
                 console.error("Error:", error);
                 alert("Failed to send data.");
