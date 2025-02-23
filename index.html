@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Web App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input, button { font-size: 18px; padding: 10px; margin-top: 10px; width: 80%; }
+    </style>
+</head>
+<body>
+
+    <h2>Enter a Keyword</h2>
+    <input type="text" id="keyword" placeholder="Enter keyword...">
+    <button id="submit">Submit</button>
+
+    <script>
+        window.Telegram.WebApp.expand(); // Expand WebApp to full screen
+
+        // Get user data from Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        let userData = tg.initDataUnsafe.user;
+        
+        if (!userData) {
+            alert("Failed to get Telegram user data. Please open this from Telegram.");
+        }
+
+        document.getElementById("submit").addEventListener("click", async () => {
+            const keyword = document.getElementById("keyword").value.trim();
+
+            if (!keyword) {
+                alert("Please enter a keyword.");
+                return;
+            }
+
+            const chat_id = userData?.id; // Extract Telegram user ID
+
+            if (!chat_id) {
+                alert("Could not get chat ID.");
+                return;
+            }
+
+            // Replace this with your n8n webhook URL
+            const webhookUrl = "https://bot.kmonlinesolutions.com/webhook-test/3f74359a-a00a-4b04-b6b4-6952d3180b0d";
+
+            // Send data to n8n webhook
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chat_id, keyword }),
+                });
+
+                const result = await response.json();
+                alert("Data sent successfully!");
+
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Failed to send data.");
+            }
+        });
+    </script>
+
+</body>
+</html>
