@@ -34,18 +34,33 @@
         padding-right: 0px;
   width: 100%;
   height: 20vh;
-  background: url(https://raw.githubusercontent.com/bigfather98/oljtestbot/refs/heads/main/OnlineJobsPH.png) no-repeat center center / cover;
+  background: url(https://raw.githubusercontent.com/bigfather98/OLJ-keyword/refs/heads/main/OnlineJobsPH.png) no-repeat center center / cover;
   border-radius: 0px;
 }
 
     input {
         font-size: 18px;
         padding: 10px;
-        margin-top: 50px;
+        margin-top: 40px;
         width: 60%;
         border: 1px solid #ccc;
         border-radius: 5px;
+        margin-bottom: 20px;
     }
+
+    h2 {
+        font-size: 18px;
+        padding: 10px;
+        margin-top: 50px;
+        text-align: center;
+    } 
+    h3 {
+        font-size: 12px;
+        padding: 10px;
+        text-align: center;
+        color: gray;
+        margin-top: 0px;
+    } 
 
     button {
         font-size: 18px;
@@ -82,10 +97,18 @@
     @keyframes spin {
         to { transform: rotate(360deg); }
     }
+
+.center-placeholder::placeholder {
+            text-align: center;
+            display: block; /* Ensures the placeholder text respects the text alignment */
+        }
+    
 </style>
 <body>
     <div class="shape"></div>
-    <input type="text" id="keyword" placeholder="Enter keyword...">
+    <h2>OLJ only supports an "exact match" keyword. Use 1 word for better search result.</h2>
+    <h3>Example: "VA" or "virtual" for Virtual Assistant jobs</h3>
+    <input type="text" id="keyword" class="center-placeholder" placeholder="Enter 1 keyword only...">
     <button id="submit">Submit</button>
 
     <script>
@@ -103,12 +126,13 @@
         submitButton.innerHTML = '<span class="spinner"></span> Loading...'; // You can also use a spinner icon here
 
         const keyword = document.getElementById("keyword").value.trim();
-        if (!keyword) {
-            tg.showPopup({
-                title: 'Error',
-                message: 'Please enter a keyword.',
-                buttons: [{type: 'ok'}]
-            });
+        // Check for special characters
+if (/[^a-zA-Z0-9 ]/.test(keyword)) {
+    tg.showPopup({
+        title: "Invalid Input",
+        message: "Special characters are not allowed. Use only letters and numbers.",
+        buttons: [{ type: "ok" }]
+    });
             // Reset button state
             submitButton.disabled = false;
             submitButton.innerHTML = originalButtonText;
@@ -128,7 +152,7 @@
             return;
         }
 
-        const webhookUrl = "https://bot.kmonlinesolutions.com/webhook-test/3f74359a-a00a-4b04-b6b4-6952d3180b0d";
+        const webhookUrl = "https://bot.kmonlinesolutions.com/webhook/3f74359a-a00a-4b04-b6b4-6952d3180b0d";
 
         try {
             const response = await fetch(webhookUrl, {
