@@ -115,17 +115,24 @@
                 submitButton.disabled = false;
                 submitButton.innerHTML = originalButtonText;
                 
-                alert("Keyword Updated");
+               tg.showPopup({
+                    title: 'Success',
+                    message: 'Keyword updated',
+                    buttons: [{type: 'ok'}]
+                });
+                
                 // Close the WebApp after a short delay
-                setTimeout(() => {
                     tg.close();
-                }, 0001);
             } else {
                 throw new Error('Request failed');
             }
         } catch (error) {
             console.error("Error:", error);
-            alert("Failed to send data.");
+            tg.showPopup({
+                title: 'Error',
+                message: 'Failed to send data.',
+                buttons: [{type: 'ok'}]
+            });
             // Reset button state
             submitButton.disabled = false;
             submitButton.innerHTML = originalButtonText;
