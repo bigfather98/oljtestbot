@@ -130,8 +130,8 @@
             console.error("Error:", error);
             tg.showPopup({
                 title: 'Error',
-                message: 'Failed to send data.',
-                buttons: [{type: 'ok'}]
+                message: 'Failed to send data. Click Ok and press Submit button again.',
+                buttons: [{type: 'Ok'}]
             });
             // Reset button state
             submitButton.disabled = false;
