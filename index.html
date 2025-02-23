@@ -86,6 +86,9 @@
                 });
 
                 alert("Data sent successfully!");
+                setTimeout(() => {
+                    tg.close();
+                }, 1000)
             } catch (error) {
                 console.error("Error:", error);
                 alert("Failed to send data.");
