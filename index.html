@@ -143,6 +143,9 @@
         // Continue with submission process...
         return;
     }
+                    // Reset button state
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
 
         const chat_id = userData?.id;
         if (!chat_id) {
@@ -189,9 +192,10 @@
                 message: 'Failed to send data. Click Ok and press Submit button again.',
                 buttons: [{type: 'Ok'}]
             });
-            // Reset button state
+                        // Reset button state
             submitButton.disabled = false;
             submitButton.innerHTML = originalButtonText;
+
         }
     });
 </script>
