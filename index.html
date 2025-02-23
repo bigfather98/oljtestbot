@@ -116,11 +116,11 @@
                 submitButton.disabled = false;
                 submitButton.innerHTML = originalButtonText;
                 
-                alert("Data sent successfully!");
+                alert("Keyword Updated");
                 // Close the WebApp after a short delay
                 setTimeout(() => {
                     tg.close();
-                }, 1000);
+                }, 0001);
             } else {
                 throw new Error('Request failed');
             }
