@@ -85,7 +85,11 @@
 
         const keyword = document.getElementById("keyword").value.trim();
         if (!keyword) {
-            alert("Please enter a keyword.");
+            tg.showPopup({
+                title: 'Error',
+                message: 'Please enter a keyword.',
+                buttons: [{type: 'ok'}]
+            });
             // Reset button state
             submitButton.disabled = false;
             submitButton.innerHTML = originalButtonText;
@@ -94,7 +98,11 @@
 
         const chat_id = userData?.id;
         if (!chat_id) {
-            alert("Could not get chat ID.");
+            tg.showPopup({
+                title: 'Error',
+                message: 'Could not get chat ID.',
+                buttons: [{type: 'ok'}]
+            });
             // Reset button state
             submitButton.disabled = false;
             submitButton.innerHTML = originalButtonText;
